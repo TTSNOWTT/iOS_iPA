@@ -8,14 +8,22 @@ jobs:
     name: 🎉 iOS Build
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          architecture: x64
+    
+- uses: yukiarrr/unity-build-action@v0.5.0
+  with:
+    unity-version: 2018.4.12f1
+    unity-username: ${{ secrets.UNITY_USERNAME }}
+    unity-password: ${{ secrets.UNITY_PASSWORD }}
+    unity-serial: ${{ secrets.UNITY_SERIAL }}
+    build-target: iOS
+- uses: yukiarrr/ios-build-action@v1.2.0
+  with:
+    project-path: Output/Unity-iPhone.xcodeproj
+    p12-base64: ${{ secrets.P12_BASE64 }}
+    mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
+    code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
+    team-id: ${{ secrets.TEAM_ID }}          
       - run: flutter pub get
-      
 
       - run: pod repo update
         working-directory: ios
